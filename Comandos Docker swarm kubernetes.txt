@@ -1,0 +1,100 @@
+3110-3119
+10404
+diegomssilva doker usuario
+Juju404650
+chave aws
+note1
+--- dockor swarm aws
+sudo service docker start
+sudo yum install docker
+sudo docker swarm leave -f forca saida
+sudo docker swarm init  inicia docker
+sudo docker service ls -- listar serviços
+sudo docker node ls -- maquinas conectadas no swarm
+sudo docker service rm <nome servico>
+sudo docker service create --name nginxreplicas --replicas 3 -p 80:80 nginx replica nos outros servidors
+docker swarm join-token manager -- mostra token join da maquina gerente para adicionar nas outras
+sudo docker  service inspect u1z4ex4dpcrc --informacoes do servico execuntando
+
+sudo docker service ps lista de containers q estao rodando e os q ja receberam baixa
+
+sudo docker node rm remove uma das maquinas do swarm
+sudo docker node update --availability drain +ipservico bloqueia para atualizacao stop para receber taks
+sudo docker node update --availability Active +ipservico reativa para atualizacao
+sudo docker service update --image nginx:latest  u1z4ex4dpcrc
+
+
+erro swarm join caso vc remover uma maquina e tentar dar join novamente da erro ... solucao recriar tudo no manager ...sudo docker swarm leave -f forca saida
+reiniciar com sudo docker swarm init ip servidor
+  
+sudo docker swarm join --token SWMTKN-1-0q913ea9052kk8of8im5g0xtxlyo1owk7yg58rit88xgpdx0ha-am8mq8lzj2vvd25xffukhb2gc 3.17.204.225:2377
+
+sudo docker network create --driver overlay swarm rede para servico swarm
+
+sudo docker network ls listar redes 
+
+sudo docker service create --name nginxreplicas --replicas 3 -p 80:80 --network swarm nginx para q fazer issso ... swarm todo mundo interage com todo mundo --- com isso limitamos a rede interagir so com o servico necessario
+
+sudo service update --network-add swarm +id servico adiciiona ao uma rede especifico serviço pertence a ela entao
+
+
+--Doker kubernetes k8s
+
+minikube start --driver=docker --- intalar minikube com docker 
+minikube status -- verifica status minikube 
+kubectl delete deployment flask-deployment-- para minikube
+minikube dashboard abre dashboard mini
+minikube dashboard --url   informa url q esta emulado
+docker build -t diegomssilva/flask-kub-projeto . -- builda projeto 
+
+docker run -d -p 5000:5000 --name flask-kub --rm diegomssilva/flask-kub-projeto roda na porta especifica 
+
+kubectl create deployment flask-deployment --image=diegomssilva/flask-kub-projeto cria deploy de image q esta no hub cria na desk no minikube dashboard ...temos um projeto iniciado no servidor q vai liderar outros serviços
+
+kubectl get deployments   -- verifica os  deployments rodando 
+ 
+kubectl describe deployments   --- mostra no console a descricao do deployment rodando
+
+Pods sao aonde os containers sao executados,
+kubectl get pods -- verifica os  pods que estao  rodando 
+
+kubectl describe pods   --- mostra no console a descricao do pods rodando detalhes 
+
+kubectl config view  ver configurações servidor
+kubectl expose deployment flask-deployment --type=LoadBalancer --port=5000
+
+kubectl describe services/flask-deployment --- descricao serviço 
+
+kubectl scale deployment/flask-deployment --replicas=5  numeros de pods escalados para aplicacao
+
+kubectl get pods exibe pods criados 
+
+kubectl get rs fala qual eh a replica de qual quantidade de pods
+ 
+kubectl scale deployment/flask-deployment --replicas=4  numeros de pods escalados para aplicacao para dimmunir replacas so mudar onumero de replicas
+
+kubectl rollout status deployment/flask-deployment atualizacao 
+
+kubectl rollout status undo  deployment/flask-deployment desfaz atualizacao 
+
+kubectl delete deployment flask-deployment deleta deployment
+
+
+chaves mais utilizadas
+
+apiVersion ... versao utilizada da ferramenta 
+
+kind ... tipo do arquivo (deployment, service)
+
+metadata ... descrever algum objeto , inserindo chaves como name; 
+
+replicas ... numero de replicas de Nodes/Pods
+
+containers ... definir as especificações de containers como :nome e imagem
+
+
+kubectl  apply -f flask.yaml cria por aquivo com os comandos acima modo declarativo
+
+kubectl  delete -f .\flask.yaml deleta por nome s
+kubectl  apply -f flask-service.yaml -- cria serviço 
+ minikube service flask-service cria ip para serviço no minikube 
